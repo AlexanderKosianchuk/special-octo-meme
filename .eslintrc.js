@@ -13,6 +13,8 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'error',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
+    semi: ['error', 'never'],
+    'prettier/prettier': ['error', { semi: false }],
   },
   parserOptions: {
     ecmaVersion: 2022,
@@ -34,4 +36,4 @@ module.exports = {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
   },
-};
+}
