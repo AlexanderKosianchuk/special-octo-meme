@@ -12,6 +12,10 @@ A modern desktop audio recording application built with Electron, React, and Typ
 - **Cross-platform**: Available for macOS, Windows, and Linux
 - **Modern UI**: Clean, responsive interface built with Tailwind CSS
 
+## Acknowledgments
+
+This project is based on the [Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate), a foundation for scalable cross-platform apps. We extend our gratitude to the maintainers and contributors of this excellent boilerplate project.
+
 ## Setup Instructions
 
 ### Prerequisites
