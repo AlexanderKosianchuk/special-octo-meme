@@ -2,8 +2,8 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 
-export type Channels = 'save-recording' | 'get-recordings-path'
-export type InvokeChannels = 'save-recording' | 'get-recordings-path' | 'start-recording-stream' | 'write-recording-chunk' | 'finish-recording-stream'
+export type Channels = 'get-recordings-path'
+export type InvokeChannels = 'get-recordings-path' | 'start-recording-stream' | 'write-recording-chunk' | 'finish-recording-stream'
 
 const electronHandler = {
   ipcRenderer: {

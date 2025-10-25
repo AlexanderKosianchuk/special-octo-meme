@@ -5,7 +5,7 @@ declare global {
   interface Window {
     electron: ElectronHandler & {
       ipcRenderer: {
-        invoke: (channel: 'save-recording' | 'get-recordings-path', ...args: any[]) => Promise<any>
+        invoke: (channel: 'get-recordings-path' | 'start-recording-stream' | 'write-recording-chunk' | 'finish-recording-stream', ...args: any[]) => Promise<any>
       }
     }
   }
