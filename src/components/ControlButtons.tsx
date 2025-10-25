@@ -1,12 +1,5 @@
 import { Play, Square, Pause } from 'lucide-react'
-
-interface ControlButtonsProps {
-  isRunning: boolean
-  isPaused: boolean
-  onStart: () => void
-  onStop: () => void
-  onPauseResume: () => void
-}
+import { ControlButtonsProps } from '@/types'
 
 export default function ControlButtons({
   isRunning,
@@ -14,15 +7,22 @@ export default function ControlButtons({
   onStart,
   onStop,
   onPauseResume,
+  size = 'normal',
 }: ControlButtonsProps) {
+  const isSmall = size === 'small'
+  const buttonSize = isSmall ? 'w-15 h-15' : 'w-30 h-30'
+  const iconSize = isSmall ? 28 : 56
+  const gapSize = isSmall ? 'gap-8' : 'gap-16'
+  const paddingSize = isSmall ? 'p-4' : 'p-8'
+
   return (
-    <div className="flex justify-center gap-16">
+    <div className={`flex justify-center ${gapSize}`}>
       <button
         type="button"
         onClick={onStart}
         disabled={isRunning && !isPaused}
         className={`
-          w-30 h-30 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
+          ${buttonSize} rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${paddingSize}
           ${
             isRunning && !isPaused
               ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
@@ -31,7 +31,7 @@ export default function ControlButtons({
         `}
         title="Start Recording"
       >
-        <Play size={56} />
+        <Play size={iconSize} />
       </button>
 
       <button
@@ -39,7 +39,7 @@ export default function ControlButtons({
         onClick={onStop}
         disabled={!isRunning}
         className={`
-          w-30 h-30 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
+          ${buttonSize} rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${paddingSize}
           ${
             !isRunning
               ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
@@ -48,7 +48,7 @@ export default function ControlButtons({
         `}
         title="Stop Recording"
       >
-        <Square size={56} />
+        <Square size={iconSize} />
       </button>
 
       <button
@@ -56,7 +56,7 @@ export default function ControlButtons({
         onClick={onPauseResume}
         disabled={!isRunning}
         className={`
-          w-30 h-30 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
+          ${buttonSize} rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${paddingSize}
           ${
             !isRunning
               ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
@@ -65,7 +65,7 @@ export default function ControlButtons({
         `}
         title={isPaused ? 'Resume Recording' : 'Pause Recording'}
       >
-        {isPaused ? <Play size={56} /> : <Pause size={56} />}
+        {isPaused ? <Play size={iconSize} /> : <Pause size={iconSize} />}
       </button>
     </div>
   )

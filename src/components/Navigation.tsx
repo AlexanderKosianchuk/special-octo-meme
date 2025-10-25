@@ -27,7 +27,16 @@ export default function Navigation() {
       >
         History
       </Link>
+      <Link
+        to="/transcript"
+        className={`px-6 py-3 font-medium transition-all duration-200 border-b-2 rounded-t-lg ${
+          isActive('/transcript')
+            ? 'text-blue-400 border-blue-400 bg-gray-800/50'
+            : 'text-gray-400 border-transparent hover:text-gray-300 hover:border-gray-500'
+        }`}
+      >
+        Transcript
+      </Link>
     </nav>
   )
 }
-

@@ -1,10 +1,6 @@
-import { ReactNode } from 'react'
 import AppHeader from '@/components/AppHeader'
 import Navigation from '@/components/Navigation'
-
-interface LayoutProps {
-  children: ReactNode
-}
+import { LayoutProps } from '@/types'
 
 export default function Layout({ children }: LayoutProps) {
   return (

@@ -1,10 +1,4 @@
-import { AudioFormat } from '@/main/audio-recording-ipc'
-
-interface AudioFormatSelectorProps {
-  audioFormat: AudioFormat
-  setAudioFormat: (format: AudioFormat) => void
-  isRunning: boolean
-}
+import { AudioFormatSelectorProps } from '@/types'
 
 export default function AudioFormatSelector({
   audioFormat,

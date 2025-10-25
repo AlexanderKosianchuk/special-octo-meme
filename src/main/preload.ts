@@ -1,10 +1,7 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import { AudioFormat } from './audio-recording-ipc'
-
-export type Channels = 'get-recordings-path'
-export type InvokeChannels = 'get-recordings-path' | 'start-recording-stream' | 'write-recording-chunk' | 'finish-recording-stream' | 'list-recordings' | 'show-item-in-folder' | 'set-audio-format' | 'get-audio-format'
+import { Channels, InvokeChannels, ElectronHandler } from '../types'
 
 const electronHandler = {
   ipcRenderer: {
@@ -30,5 +27,3 @@ const electronHandler = {
 }
 
 contextBridge.exposeInMainWorld('electron', electronHandler)
-
-export type ElectronHandler = typeof electronHandler

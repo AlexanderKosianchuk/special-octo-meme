@@ -2,14 +2,7 @@ import { useState, useEffect } from 'react'
 import { FolderOpen } from 'lucide-react'
 
 import Layout from '@/components/Layout'
-
-interface Recording {
-  filename: string
-  filepath: string
-  size: number
-  createdAt: string
-  modifiedAt: string
-}
+import { Recording } from '@/types'
 
 export default function History() {
   const [recordings, setRecordings] = useState<Recording[]>([])

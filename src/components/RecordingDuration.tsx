@@ -1,6 +1,4 @@
-interface RecordingDurationProps {
-  duration: number
-}
+import { RecordingDurationProps } from '@/types'
 
 const formatDuration = (seconds: number) => {
   const hours = Math.floor(seconds / 3600)

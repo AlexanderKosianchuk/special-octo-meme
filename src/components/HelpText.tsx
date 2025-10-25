@@ -1,8 +1,4 @@
-import { AudioFormat } from '@/main/audio-recording-ipc'
-
-interface HelpTextProps {
-  audioFormat: AudioFormat
-}
+import { HelpTextProps } from '@/types'
 
 export default function HelpText({ audioFormat }: HelpTextProps) {
   return (

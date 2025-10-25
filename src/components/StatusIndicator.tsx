@@ -1,7 +1,4 @@
-interface StatusIndicatorProps {
-  isRunning: boolean
-  isPaused: boolean
-}
+import { StatusIndicatorProps } from '@/types'
 
 export default function StatusIndicator({
   isRunning,

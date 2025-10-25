@@ -5,7 +5,7 @@ import Layout from '@/components/Layout'
 import ControlButtons from '@/components/ControlButtons'
 import StatusIndicator from '@/components/StatusIndicator'
 import HelpText from '@/components/HelpText'
-import { AudioFormat } from '@/main/audio-recording-ipc'
+import { AudioFormat } from '@/types'
 
 const CHUNK_SIZE = 100 // 100ms
 export default function Home() {
