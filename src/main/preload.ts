@@ -2,7 +2,8 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 
-export type Channels = 'ipc-example'
+export type Channels = 'save-recording' | 'get-recordings-path'
+export type InvokeChannels = 'save-recording' | 'get-recordings-path' | 'start-recording-stream' | 'write-recording-chunk' | 'finish-recording-stream'
 
 const electronHandler = {
   ipcRenderer: {
@@ -20,6 +21,9 @@ const electronHandler = {
     },
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args))
+    },
+    invoke(channel: InvokeChannels, ...args: unknown[]) {
+      return ipcRenderer.invoke(channel, ...args)
     },
   },
 }
