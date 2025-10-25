@@ -1,6 +1,8 @@
+import { AudioFormat } from '@/main/audio-recording-ipc'
+
 interface AudioFormatSelectorProps {
-  audioFormat: 'webm' | 'mp3'
-  setAudioFormat: (format: 'webm' | 'mp3') => void
+  audioFormat: AudioFormat
+  setAudioFormat: (format: AudioFormat) => void
   isRunning: boolean
 }
 
@@ -11,9 +13,8 @@ export default function AudioFormatSelector({
 }: AudioFormatSelectorProps) {
   return (
     <div className="flex justify-center mb-8">
-      <div className="bg-gray-800 rounded-xl px-6 py-4 border border-gray-600">
+      <div className="bg-gray-900 rounded-xl px-6 py-4 border border-gray-600">
         <div className="text-center">
-          <div className="text-sm text-gray-400 mb-3">Audio Format</div>
           <div className="flex gap-4">
             <button
               type="button"
@@ -48,6 +49,7 @@ export default function AudioFormatSelector({
               MP3
             </button>
           </div>
+          <div className="text-sm text-gray-400 mt-3">Audio Format</div>
         </div>
       </div>
     </div>

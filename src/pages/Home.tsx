@@ -1,16 +1,17 @@
 import { useState, useRef, useEffect } from 'react'
 import RecordingDuration from '@/components/RecordingDuration'
 import AudioFormatSelector from '@/components/AudioFormatSelector'
-import AppHeader from '@/components/AppHeader'
+import Layout from '@/components/Layout'
 import ControlButtons from '@/components/ControlButtons'
 import StatusIndicator from '@/components/StatusIndicator'
 import HelpText from '@/components/HelpText'
+import { AudioFormat } from '@/main/audio-recording-ipc'
 
 const CHUNK_SIZE = 100 // 100ms
 export default function Home() {
   const [isRunning, setIsRunning] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
-  const [audioFormat, setAudioFormat] = useState<'webm' | 'mp3'>('webm')
+  const [audioFormat, setAudioFormat] = useState<AudioFormat>('webm')
 
   // Timer state
   const [duration, setDuration] = useState(0)
@@ -182,6 +183,41 @@ export default function Home() {
     }
   }
 
+  // Load saved audio format on mount
+  useEffect(() => {
+    const loadAudioFormat = async () => {
+      try {
+        const result =
+          await window.electron.ipcRenderer.invoke('get-audio-format')
+        if (result.success) {
+          setAudioFormat(result.audioFormat)
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error loading audio format preference:', error)
+      }
+    }
+
+    loadAudioFormat()
+  }, [])
+
+  // Save audio format when it changes
+  useEffect(() => {
+    const saveAudioFormat = async () => {
+      try {
+        await window.electron.ipcRenderer.invoke(
+          'set-audio-format',
+          audioFormat,
+        )
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error saving audio format preference:', error)
+      }
+    }
+
+    saveAudioFormat()
+  }, [audioFormat])
+
   // Cleanup on component unmount
   useEffect(() => {
     return () => {
@@ -197,30 +233,35 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800">
-      <AppHeader />
+    <Layout>
+      <div className="flex flex-col items-center justify-center w-full">
+        <div className="bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-700 max-w-4xl w-full">
+          <div className="flex gap-8 mb-4">
+            <div className="flex-1">
+              <RecordingDuration duration={duration} />
+            </div>
+            <div className="flex-1">
+              <AudioFormatSelector
+                audioFormat={audioFormat}
+                setAudioFormat={setAudioFormat}
+                isRunning={isRunning}
+              />
+            </div>
+          </div>
 
-      <div className="bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-700 max-w-4xl w-full">
-        <RecordingDuration duration={duration} />
+          <ControlButtons
+            isRunning={isRunning}
+            isPaused={isPaused}
+            onStart={handleStart}
+            onStop={handleStop}
+            onPauseResume={handlePauseResume}
+          />
 
-        <AudioFormatSelector
-          audioFormat={audioFormat}
-          setAudioFormat={setAudioFormat}
-          isRunning={isRunning}
-        />
+          <StatusIndicator isRunning={isRunning} isPaused={isPaused} />
 
-        <ControlButtons
-          isRunning={isRunning}
-          isPaused={isPaused}
-          onStart={handleStart}
-          onStop={handleStop}
-          onPauseResume={handlePauseResume}
-        />
-
-        <StatusIndicator isRunning={isRunning} isPaused={isPaused} />
-
-        <HelpText audioFormat={audioFormat} />
+          <HelpText audioFormat={audioFormat} />
+        </div>
       </div>
-    </div>
+    </Layout>
   )
 }

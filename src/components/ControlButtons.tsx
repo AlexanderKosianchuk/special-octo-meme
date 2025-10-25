@@ -22,7 +22,7 @@ export default function ControlButtons({
         onClick={onStart}
         disabled={isRunning && !isPaused}
         className={`
-          w-40 h-40 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
+          w-30 h-30 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
           ${
             isRunning && !isPaused
               ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
@@ -39,7 +39,7 @@ export default function ControlButtons({
         onClick={onStop}
         disabled={!isRunning}
         className={`
-          w-40 h-40 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
+          w-30 h-30 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
           ${
             !isRunning
               ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
@@ -56,7 +56,7 @@ export default function ControlButtons({
         onClick={onPauseResume}
         disabled={!isRunning}
         className={`
-          w-40 h-40 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
+          w-30 h-30 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 p-8
           ${
             !isRunning
               ? 'bg-gray-600 text-gray-400 cursor-not-allowed'

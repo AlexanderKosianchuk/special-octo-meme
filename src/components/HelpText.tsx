@@ -1,5 +1,7 @@
+import { AudioFormat } from '@/main/audio-recording-ipc'
+
 interface HelpTextProps {
-  audioFormat: 'webm' | 'mp3'
+  audioFormat: AudioFormat
 }
 
 export default function HelpText({ audioFormat }: HelpTextProps) {
