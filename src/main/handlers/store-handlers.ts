@@ -1,13 +1,11 @@
-import { ipcMain } from 'electron'
+import { ipcMain, app } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'
 import { AudioFormat } from '../../types'
 
 // Configuration constants
-const CONFIG_PATH = path.join(os.homedir(), '.config.json')
-
-console.log('CONFIG_PATH', CONFIG_PATH)
+const CONFIG_PATH = path.join(app.getPath('userData'), 'config.json')
 
 export function setupStoreHandlers() {
   // Store audio format preference
