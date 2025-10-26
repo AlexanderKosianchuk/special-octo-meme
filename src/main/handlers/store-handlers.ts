@@ -7,6 +7,8 @@ import { AudioFormat } from '../../types'
 // Configuration constants
 const CONFIG_PATH = path.join(os.homedir(), '.config.json')
 
+console.log('CONFIG_PATH', CONFIG_PATH)
+
 export function setupStoreHandlers() {
   // Store audio format preference
   ipcMain.handle('set-audio-format', (event, format: AudioFormat) => {

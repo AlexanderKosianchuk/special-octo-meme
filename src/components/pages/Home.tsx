@@ -136,8 +136,6 @@ export default function Home() {
 
       startTimer()
 
-      // eslint-disable-next-line no-console
-      console.log('Recording started with real-time streaming')
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error starting recording:', error)
