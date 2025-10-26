@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import Layout from '@/components/Layout'
-import ControlButtons from '@/components/ControlButtons'
+
+import Layout from '@/components/layout/Layout'
+import ControlButtons from '@/components/controls/ControlButtons'
 
 // TypeScript declarations for Web Speech API
 interface SpeechRecognitionAlternative {
@@ -141,9 +142,6 @@ export default function Transcript() {
   // Audio level monitoring
   const startAudioLevelMonitoring = async () => {
     try {
-      // eslint-disable-next-line no-console
-      console.log('Requesting microphone access...')
-
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: false,
@@ -152,16 +150,8 @@ export default function Transcript() {
         },
       })
 
-      // eslint-disable-next-line no-console
-      console.log('Microphone stream obtained:', stream)
-      // eslint-disable-next-line no-console
-      console.log('Audio tracks:', stream.getAudioTracks())
-
       const audioContext = new (window.AudioContext ||
         (window as any).webkitAudioContext)()
-
-      // eslint-disable-next-line no-console
-      console.log('Audio context created:', audioContext.state)
 
       const analyser = audioContext.createAnalyser()
       const microphone = audioContext.createMediaStreamSource(stream)
@@ -207,22 +197,12 @@ export default function Transcript() {
 
           setAudioLevel(normalizedLevel)
 
-          // Debug logging - show all levels for debugging
-          // eslint-disable-next-line no-console
-          console.log(
-            `Audio level: ${normalizedLevel.toFixed(4)}, Active: ${isActive}, Raw RMS: ${rms.toFixed(2)}, Max: ${Math.max(...dataArray)}`,
-          )
-
           // Continue monitoring even if not running (for debugging)
           animationFrameRef.current = requestAnimationFrame(updateAudioLevel)
         }
       }
 
-      // Start monitoring immediately
       updateAudioLevel()
-
-      // eslint-disable-next-line no-console
-      console.log('Audio level monitoring started')
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(
@@ -274,33 +254,15 @@ export default function Transcript() {
     recognition.continuous = true
     recognition.interimResults = true
     recognition.lang = 'en-US'
-    // recognition.maxAlternatives = 1 // Not supported in all browsers
-
-    // eslint-disable-next-line no-console
-    console.log('Speech recognition configured:', {
-      continuous: recognition.continuous,
-      interimResults: recognition.interimResults,
-      lang: recognition.lang,
-    })
 
     // Handle recognition results
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      // eslint-disable-next-line no-console
-      console.log('Speech recognition result:', event)
-
       let finalTranscript = ''
       let interimText = ''
 
       for (let i = event.resultIndex; i < event.results.length; i += 1) {
         const result = event.results[i]
-        const { transcript: transcriptText, confidence } = result[0]
-
-        // eslint-disable-next-line no-console
-        console.log(`Result ${i}:`, {
-          transcript: transcriptText,
-          confidence,
-          isFinal: result.isFinal,
-        })
+        const { transcript: transcriptText } = result[0]
 
         if (result.isFinal) {
           finalTranscript += transcriptText
@@ -310,18 +272,12 @@ export default function Transcript() {
       }
 
       if (finalTranscript) {
-        // eslint-disable-next-line no-console
-        console.log('Final transcript added:', finalTranscript)
         setTranscript((prev) => {
           const newTranscript = prev + finalTranscript
-          // eslint-disable-next-line no-console
-          console.log('Updated transcript:', newTranscript)
           return newTranscript
         })
         setInterimTranscript('')
       } else if (interimText) {
-        // eslint-disable-next-line no-console
-        console.log('Interim transcript:', interimText)
         setInterimTranscript(interimText)
       }
     }
@@ -373,22 +329,11 @@ export default function Transcript() {
       }
     }
 
-    // Handle recognition start
-    ;(recognition as any).onstart = () => {
-      // eslint-disable-next-line no-console
-      console.log('Speech recognition started')
-    }
-
     // Handle recognition end
     recognition.onend = () => {
-      // eslint-disable-next-line no-console
-      console.log('Speech recognition ended')
-
       if (isRunning && !isPaused) {
         // Auto-restart for continuous recognition
         try {
-          // eslint-disable-next-line no-console
-          console.log('Auto-restarting speech recognition...')
           recognition.start()
         } catch (err) {
           // eslint-disable-next-line no-console
@@ -431,8 +376,6 @@ export default function Transcript() {
       await startAudioLevelMonitoring()
 
       if (recognitionRef.current) {
-        // eslint-disable-next-line no-console
-        console.log('Starting speech recognition...')
         recognitionRef.current.start()
       }
     } catch (err) {
@@ -575,20 +518,14 @@ export default function Transcript() {
             </div>
           )}
 
-          <div className="mt-6 overflow-x-auto max-h-[280px] overflow-y-auto">
-            <h3 className="text-lg font-semibold text-white mb-3">
+          <div className="mt-6 overflow-x-auto overflow-y-auto">
+            <h3 className="text-lg font-semibold text-white mb-1">
               Transcript
             </h3>
             <div
               ref={transcriptRef}
-              className="bg-gray-900 rounded-lg p-4 h-96 overflow-y-auto border border-gray-600"
+              className="bg-gray-900 rounded-lg p-4 h-66 max-h-[200px] overflow-y-auto border border-gray-600"
             >
-              {/* Debug info */}
-              <div className="text-xs text-gray-500 mb-2">
-                Debug: transcript=&quot;{transcript}&quot; interim=&quot;{interimTranscript}&quot; isRunning=
-                {isRunning.toString()}
-              </div>
-
               {transcript || interimTranscript ? (
                 <div className="text-gray-100 whitespace-pre-wrap leading-relaxed">
                   {transcript}

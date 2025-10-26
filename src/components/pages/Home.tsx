@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
-import RecordingDuration from '@/components/RecordingDuration'
-import AudioFormatSelector from '@/components/AudioFormatSelector'
-import Layout from '@/components/Layout'
-import ControlButtons from '@/components/ControlButtons'
-import StatusIndicator from '@/components/StatusIndicator'
-import HelpText from '@/components/HelpText'
+import RecordingDuration from '@/components/home/RecordingDuration'
+import AudioFormatSelector from '@/components/home/AudioFormatSelector'
+import Layout from '@/components/layout/Layout'
+import ControlButtons from '@/components/controls/ControlButtons'
+import StatusIndicator from '@/components/home/StatusIndicator'
+import HelpText from '@/components/home/HelpText'
 import { AudioFormat } from '@/types'
 
 const CHUNK_SIZE = 100 // 100ms
@@ -122,8 +122,6 @@ export default function Home() {
               'finish-recording-stream',
               recordingSessionIdRef.current,
             )
-            // eslint-disable-next-line no-console
-            console.log('Recording session finished')
           } catch (error) {
             // eslint-disable-next-line no-console
             console.error('Error finishing recording session:', error)

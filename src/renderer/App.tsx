@@ -1,7 +1,7 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from '@/pages/Home'
-import History from '@/pages/History'
-import Transcript from '@/pages/Transcript'
+import Home from '@/components/pages/Home'
+import History from '@/components/pages/History'
+import Transcript from '@/components/pages/Transcript'
 
 import './App.css'
 

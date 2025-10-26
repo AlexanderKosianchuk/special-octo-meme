@@ -1,20 +1,14 @@
-import { ipcMain, shell } from 'electron'
+import { ipcMain } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'
-import { AudioFormat } from '../types'
+import { AudioFormat } from '../../types'
 
-// Configuration constants
-const CONFIG_PATH = path.join(os.homedir(), '.config.json')
-
-// Store active file streams for real-time recording
-const activeStreams = new Map<string, { stream: fs.WriteStream; format: AudioFormat; tempFilePath: string }>()
-
-// Lazy FFmpeg initialization
+// FFmpeg initialization and configuration
 let ffmpegPath: string | null = null
 let ffmpeg: any = null
 
-function initializeFFmpeg(): { ffmpeg: any; ffmpegPath: string | null } {
+export function initializeFFmpeg(): { ffmpeg: any; ffmpegPath: string | null } {
   if (ffmpeg) {
     return { ffmpeg, ffmpegPath }
   }
@@ -63,62 +57,11 @@ function initializeFFmpeg(): { ffmpeg: any; ffmpegPath: string | null } {
   return { ffmpeg, ffmpegPath }
 }
 
-// Audio recording IPC handlers
-export function setupAudioRecordingHandlers() {
-  ipcMain.handle('get-recordings-path', () => {
-    const recordingsPath = path.join(os.homedir(), 'Desktop')
-    
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(recordingsPath)) {
-      fs.mkdirSync(recordingsPath, { recursive: true })
-    }
-    
-    return recordingsPath
-  })
 
-  // Store audio format preference
-  ipcMain.handle('set-audio-format', (event, format: AudioFormat) => {
-    try {
-      let config = {}
-      
-      // Load existing config if it exists
-      if (fs.existsSync(CONFIG_PATH)) {
-        const configData = fs.readFileSync(CONFIG_PATH, 'utf8')
-        config = JSON.parse(configData)
-      }
-      
-      // Update audio format preference
-      config = { ...config, audioFormat: format }
-      
-      // Save config
-      fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2))
-      
-      return { success: true }
-    } catch (error) {
-      console.error('Error saving audio format preference:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
-    }
-  })
+// Store active file streams for real-time recording
+const activeStreams = new Map<string, { stream: fs.WriteStream; format: AudioFormat; tempFilePath: string }>()
 
-  // Get audio format preference
-  ipcMain.handle('get-audio-format', () => {
-    try {
-      if (!fs.existsSync(CONFIG_PATH)) {
-        return { success: true, audioFormat: 'webm' } // Default format
-      }
-      
-      const configData = fs.readFileSync(CONFIG_PATH, 'utf8')
-      const config = JSON.parse(configData)
-      
-      const audioFormat = config.audioFormat || 'webm'
-      
-      return { success: true, audioFormat }
-    } catch (error) {
-      console.error('Error loading audio format preference:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error', audioFormat: 'webm' }
-    }
-  })
-
+export function setupRecordingStreamHandlers() {
   // Start a new recording session with streaming
   ipcMain.handle('start-recording-stream', async (event, format: AudioFormat = 'webm') => {
     try {
@@ -232,59 +175,5 @@ export function setupAudioRecordingHandlers() {
       return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
     }
   })
-
-  // List all recordings
-  ipcMain.handle('list-recordings', async () => {
-    try {
-      const recordingsPath = path.join(os.homedir(), 'Desktop')
-      
-      // Create directory if it doesn't exist
-      if (!fs.existsSync(recordingsPath)) {
-        fs.mkdirSync(recordingsPath, { recursive: true })
-        return { success: true, recordings: [] }
-      }
-      
-      // Read directory contents
-      const files = fs.readdirSync(recordingsPath)
-      
-      // Filter for audio files and get stats
-      const recordings = files
-        .filter(file => {
-          const ext = path.extname(file).toLowerCase()
-          return ext === '.webm' || ext === '.mp3'
-        })
-        .map(file => {
-          const filePath = path.join(recordingsPath, file)
-          const stats = fs.statSync(filePath)
-          
-          return {
-            filename: file,
-            filepath: filePath,
-            size: stats.size,
-            createdAt: stats.birthtime.toISOString(),
-            modifiedAt: stats.mtime.toISOString(),
-          }
-        })
-        .sort((a, b) => {
-          // Sort by creation date, newest first
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        })
-      
-      return { success: true, recordings }
-    } catch (error) {
-      console.error('Error listing recordings:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error', recordings: [] }
-    }
-  })
-
-  // Show item in folder
-  ipcMain.handle('show-item-in-folder', async (event, filePath: string) => {
-    try {
-      shell.showItemInFolder(filePath)
-      return { success: true }
-    } catch (error) {
-      console.error('Error showing item in folder:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
-    }
-  })
 }
+

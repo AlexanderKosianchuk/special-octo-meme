@@ -1,5 +1,5 @@
-import AppHeader from '@/components/AppHeader'
-import Navigation from '@/components/Navigation'
+import AppHeader from '@/components/layout/AppHeader'
+import Navigation from '@/components/layout/Navigation'
 import { LayoutProps } from '@/types'
 
 export default function Layout({ children }: LayoutProps) {
